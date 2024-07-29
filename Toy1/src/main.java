@@ -16,9 +16,10 @@ public class main {
         //게임 종료를 구분하기위한 boolean 변수
         boolean gameEnd = false;
 
-        // case2 난수생성기능을 클래스로 나누었을떄
+    // case2 난수생성기능을 클래스로 나누었을떄
         CreateRandomNumber createRandomNumber = new CreateRandomNumber();
         int[] computerNumbers2 = createRandomNumber.generateRandomNumbers();
+    // case2 end
 
         System.out.println("숫자 야구 게임에 오신 것을 환영합니다!");
         System.out.println("컴퓨터가 숫자를 선택했습니다. 숫자를 맞춰보세요!");
@@ -44,6 +45,15 @@ public class main {
 
             int strikes = countStrikes(computerNumbers, userNumbers);
             int balls = countBalls(computerNumbers, userNumbers);
+
+
+        // case2 스트라이크,볼카운트 기능을 클래스로 나누었을때
+            StrikeCount strikeCount = new StrikeCount();
+            BallCount ballCount = new BallCount();
+
+            int Strikes = strikeCount.countStrikes(computerNumbers, userNumbers);
+            int Balls = ballCount.countBalls(computerNumbers, userNumbers);
+        // case2 end
 
             System.out.println("스트라이크: " + strikes + " 볼: " + balls);
 
@@ -72,6 +82,46 @@ public class main {
                 .toArray(); // 스트림의 요소를 배열로 수집한다
 
         return numbers;
+    }
+
+    public static int countStrikes(int[] computerNumbers, int[] userNumbers) {
+    /* case1 스트림 이용X
+        int strikes = 0;
+        for (int i = 0; i < 3; i++) {
+            if (computerNumbers[i] == userNumbers[i]) {
+                strikes++;
+            }
+        }
+        return strikes;
+
+    */
+
+    //case2 스트림 이용O
+        return (int) IntStream.range(0, 3)
+                .filter(i -> computerNumbers[i] == userNumbers[i])
+                .count();
+    }
+
+    public static int countBalls(int[] computerNumbers, int[] userNumbers) {
+
+    /* case1 스트림 이용X
+        int balls = 0;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (i != j && computerNumbers[i] == userNumbers[j]) {
+                    balls++;
+                }
+            }
+        }
+        return balls;
+
+    */
+
+    //case2 스트림 이용O
+        return (int) IntStream.range(0, 3)
+                .flatMap(i -> IntStream.range(0, 3)
+                .filter(j -> i != j && computerNumbers[i] == userNumbers[j]))
+                .count();
     }
 
 
