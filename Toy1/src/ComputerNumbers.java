@@ -1,21 +1,23 @@
-import java.util.List;
+import java.util.ArrayList;
 
 public class ComputerNumbers {
 
-    private List<Integer> computerNumbers;
+    //1. List -> ArrayList로 변경
+    //2. Integer -> Long으로 변경 (long타입변수는 Integer에 담을수없기에)
+    private ArrayList<Long> computerNumbers;
 
     public ComputerNumbers() {
     }
 
-    public ComputerNumbers(List<Integer> computerNumbers) {
+    public ComputerNumbers(ArrayList<Long> computerNumbers) {
         this.computerNumbers = computerNumbers;
     }
 
-    public List<Integer> getComputerNumbers() {
+    public ArrayList<Long> getComputerNumbers() {
         return computerNumbers;
     }
 
-    public void setComputerNumbers(List<Integer> computerNumbers) {
+    public void setComputerNumbers(ArrayList<Long> computerNumbers) {
         this.computerNumbers = computerNumbers;
     }
 

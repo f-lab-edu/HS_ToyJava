@@ -1,6 +1,7 @@
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 public class main {
 
@@ -18,11 +19,13 @@ public class main {
         // 컴퓨터에게 랜덤난수 생성 메소드
         ComputerNumbers computerNumbers = generateRandomNumbers();
         GameResult gameResult = new GameResult();
+
         while (true) {
-            UserInput userInput = inputUserNumbers();
+            UserInput userInput = inputUserNumbers(Scanner scanner);
             MatchResult gameResult = computerNumbers.match(userInput);
             gameResult.save(gameResult);
             System.out.println(gameResult.formatLastGameResult());
+
             if (gameResult.isDone()) {
                 break;
             }
@@ -108,16 +111,52 @@ public class main {
            3. collect(Collectors.toList())결국 list변환은 Collectors인터페이스의 toList를 사용하는건데
               앞에 .collect는 그러면 꼭 세트처럼 붙어있어야하나? 무슨 역할이지?
               UnsupportedOperationException방지?....
+              어 toArrayList는없다? 그러면 toList로만 변환하는게 맞는건가?
         */
-        List<Integer> testcase1 = IntStream.range(0, 3)
+        // IntStream -> LongStream으로 변경
+        ArrayList<Long> testcase1 = LongStream.range(0, 3)
                 .map(i -> random.nextInt(9) + 1)
                 .boxed()
-                .collect(Collectors.toList());
+                //ArrayList로 변환하는 방법 (컬렉션 ArrayList생성하는거겠구나)
+                .collect(Collectors.toCollection(ArrayList::new));
+                //.collect(Collectors.toList());
 
         ComputerNumbers.setComputerNumbers(testcase1);
 
 
         return ComputerNumbers;
+    }
+
+    private static UserInput inputUserNumbers(Scanner scanner) {
+        UserInput userInput = new UserInput();
+        while (true) {
+            System.out.print("숫자 3자리를 입력하세요 (각 숫자는 1~9 범위): ");
+            //
+            String input = scanner.nextLine();
+
+            // 입력 유효성 검사 (실무에서 유효성검사를 많이 진행을 안해서 어색하다)
+            if (isValidInput(input)) {
+                // 스트림을 사용하여 문자열을 long 리스트로 변환
+                ArrayList<Long> testcase2 = input.chars()
+                            .mapToLong(Character::getNumericValue)
+                            .boxed()
+                            .collect(Collectors.toCollection(ArrayList::new));
+
+                userInput.setUserInput(testcase2);
+                break;
+            } else {
+                System.out.println("잘못된 입력입니다. 다시 시도하세요.");
+            }
+        }
+        return userInput;
+
+    }
+
+    //아직 구문해석불가 유효성검사기능도 따로 유틸클래스로 모아놓고싶다 프로젝트가 커진다면
+    private static boolean isValidInput(String input) {
+        // 스트림을 사용하여 입력값의 유효성 검사
+        return input.length() == 3 && input.chars()
+                .allMatch(c -> Character.isDigit(c) && c != '0');
     }
 
     public static int countStrikes(int[] computerNumbers, int[] userNumbers) {
