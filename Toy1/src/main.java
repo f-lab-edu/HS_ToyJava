@@ -1,7 +1,4 @@
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -12,7 +9,7 @@ public class main {
         // 플레이어에게 입력값을 받기 위한 스캐너
         Scanner scanner = new Scanner(System.in);
         // 컴퓨터에게 랜덤난수 생성 메소드
-        int[] computerNumbers = generateRandomNumbers();
+        BaseBallDTO computerNumbers = generateRandomNumbers();
         //게임 종료를 구분하기위한 boolean 변수
         boolean gameEnd = false;
 
@@ -55,21 +52,32 @@ public class main {
     }
 
 // 1. 랜덤 난수 생성 메소드
-    public static int[] generateRandomNumbers() {
+    public static BaseBallDTO generateRandomNumbers() {
         //랜덤 객체 랜덤 난수 생성을 하기위함
         Random random = new Random();
 
-        Set<Integer> numbersSet = IntStream.generate(() -> random.nextInt(9) + 1)
-                .distinct() // 스트림에서 고유한값만 유지
-                .limit(3) // 스트림의 크기를 3으로 제한
-                .boxed() // IntStream을 Stream<Integer>로 변환
-                .collect(Collectors.toSet()); // Stream(Collection요소)을 Set으로 변환
+        //DTO에 담기위해 DTO객체 생성
+        /*
+        question1 : DTO에 생성자를 정의하였기 때문에 값을 넣어주어야 하는데, 이러면 생성자를 여러개 만들어야하는건가?.. 아닌거같은데
+                    3개의 난수는 DTO에 담으면안되나?.. 상태값을 나눠야하나?
+        */
+        /*
+        question2 : new로 객체를 생성하는 행위를 만약 스프링 프로젝트라고 가정하면
+                    최대한 컴포넌트화시켜서 DI를 받아서 사용하는게 좋은건가?..
+                    그러면 new도 안쓰고...너무 이상향적인 이야기인가?
+                    장점은? 단점은?.....
+         */
+        BaseBallDTO baseBallDTO = new BaseBallDTO();
 
-        int[] numbers = numbersSet.stream() // Set을 Stream으로 변환
-                .mapToInt(Number::intValue) //각 Integer를 int로 변환
-                .toArray(); // 스트림의 요소를 배열로 수집한다
+        List<Integer> testcase1 = IntStream.range(0, 3)
+                .map(i -> random.nextInt(9) + 1)
+                .boxed()
+                .collect(Collectors.toList());
 
-        return numbers;
+        baseBallDTO.setComputerNumbers(testcase1);
+
+
+        return baseBallDTO;
     }
 
     public static int countStrikes(int[] computerNumbers, int[] userNumbers) {
