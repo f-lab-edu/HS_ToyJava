@@ -8,8 +8,6 @@ public class main {
 
         // 플레이어에게 입력값을 받기 위한 스캐너
         Scanner scanner = new Scanner(System.in);
-        // 컴퓨터에게 랜덤난수 생성 메소드
-        BaseBallDTO computerNumbers = generateRandomNumbers();
         //게임 종료를 구분하기위한 boolean 변수
         boolean gameEnd = false;
 
@@ -17,7 +15,8 @@ public class main {
         System.out.println("숫자 야구 게임에 오신 것을 환영합니다!");
         System.out.println("컴퓨터가 숫자를 선택했습니다. 숫자를 맞춰보세요!");
 
-
+        // 컴퓨터에게 랜덤난수 생성 메소드
+        ComputerNumbers computerNumbers = generateRandomNumbers();
         GameResult gameResult = new GameResult();
         while (true) {
             UserInput userInput = inputUserNumbers();
