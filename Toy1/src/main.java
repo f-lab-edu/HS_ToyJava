@@ -17,6 +17,20 @@ public class main {
         System.out.println("숫자 야구 게임에 오신 것을 환영합니다!");
         System.out.println("컴퓨터가 숫자를 선택했습니다. 숫자를 맞춰보세요!");
 
+
+        GameResult gameResult = new GameResult();
+        while (true) {
+            UserInput userInput = inputUserNumbers();
+            MatchResult gameResult = computerNumbers.match(userInput);
+            gameResult.save(gameResult);
+            System.out.println(gameResult.formatLastGameResult());
+            if (gameResult.isDone()) {
+                break;
+            }
+        }
+
+        System.out.println(gameResult.formatTotalGameResult());
+        /*
         while (!gameEnd) {
             System.out.print("3자리 숫자를 입력하세요: ");
             String input = scanner.nextLine();
@@ -47,7 +61,7 @@ public class main {
                 gameEnd = true;
             }
         }
-
+        */
         scanner.close();
     }
 
