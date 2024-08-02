@@ -21,9 +21,9 @@ public class main {
         GameResult gameResult = new GameResult();
 
         while (true) {
-            UserInput userInput = inputUserNumbers(Scanner scanner);
-            MatchResult gameResult = computerNumbers.match(userInput);
-            gameResult.save(gameResult);
+            UserInput userInput = inputUserNumbers(scanner);
+            MatchResult Result = computerNumbers.match(userInput);
+            gameResult.save(Result);
             System.out.println(gameResult.formatLastGameResult());
 
             if (gameResult.isDone()) {
