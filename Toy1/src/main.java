@@ -185,46 +185,5 @@ public class main {
         return numbers.stream().distinct().count() == numbers.size();
     }
 
-    public static int countStrikes(int[] computerNumbers, int[] userNumbers) {
-    /* case1 스트림 이용X
-        int strikes = 0;
-        for (int i = 0; i < 3; i++) {
-            if (computerNumbers[i] == userNumbers[i]) {
-                strikes++;
-            }
-        }
-        return strikes;
-
-    */
-
-    //case2 스트림 이용O
-        return (int) IntStream.range(0, 3)
-                .filter(i -> computerNumbers[i] == userNumbers[i])
-                .count();
-    }
-
-    public static int countBalls(int[] computerNumbers, int[] userNumbers) {
-
-    /* case1 스트림 이용X
-        int balls = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (i != j && computerNumbers[i] == userNumbers[j]) {
-                    balls++;
-                }
-            }
-        }
-        return balls;
-
-    */
-
-    //case2 스트림 이용O
-        return (int) IntStream.range(0, 3)
-                .flatMap(i -> IntStream.range(0, 3)
-                .filter(j -> i != j && computerNumbers[i] == userNumbers[j]))
-                .count();
-    }
-
-
 }
 
