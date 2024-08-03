@@ -22,16 +22,21 @@ public class main {
 
         while (true) {
             UserInput userInput = inputUserNumbers(scanner);
+            //match메소드는 private이라서 외부에서 호출이 불가능하다
+            //그다음 상위단계인 default로 사용해보자
             MatchResult Result = computerNumbers.match(userInput);
+            //save메소드는 private이라서 외부에서 호출이 불가능하다
+            //그다음 상위단계인 default로 사용해보자
             gameResult.save(Result);
             System.out.println(gameResult.formatLastGameResult());
 
             if (gameResult.isDone()) {
+                System.out.println(gameResult.closeReason());
                 break;
             }
         }
 
-        System.out.println(gameResult.formatTotalGameResult());
+        //System.out.println(gameResult.formatTotalGameResult());
         /*
         while (!gameEnd) {
             System.out.print("3자리 숫자를 입력하세요: ");
@@ -113,13 +118,26 @@ public class main {
               UnsupportedOperationException방지?....
               어 toArrayList는없다? 그러면 toList로만 변환하는게 맞는건가?
         */
+        /*
+            중복되는 경우가 있기에 수정을하려하는데
+            generate를 쓰는경우에는 set을 활용할수있는데
+            range를 쓰는경우는 1~9까지 생성하고 강제로 섞고 중복제거를하네?
+            방식이 다르다??
+         */
         // IntStream -> LongStream으로 변경
-        ArrayList<Long> testcase1 = LongStream.range(0, 3)
-                .map(i -> random.nextInt(9) + 1)
-                .boxed()
-                //ArrayList로 변환하는 방법 (컬렉션 ArrayList생성하는거겠구나)
-                .collect(Collectors.toCollection(ArrayList::new));
-                //.collect(Collectors.toList());
+
+        // 1부터 9까지의 숫자를 생성하여 리스트로 변환
+        List<Long> numbers = LongStream.rangeClosed(1, 9) // 1부터 9까지의 숫자 생성
+                .boxed() // LongStream을 Stream<Long>으로 변환
+                .collect(Collectors.toList());
+
+        // 리스트를 셔플하여 난수를 랜덤하게 섞음
+        Collections.shuffle(numbers, random);
+
+        // 셔플된 리스트에서 처음 3개의 숫자를 선택
+        ArrayList<Long> testcase1 = numbers.stream()
+                .limit(3) // 처음 3개의 숫자를 선택
+                .collect(Collectors.toCollection(ArrayList::new)); // ArrayList로 수집
 
         ComputerNumbers.setComputerNumbers(testcase1);
 
@@ -141,9 +159,13 @@ public class main {
                             .mapToLong(Character::getNumericValue)
                             .boxed()
                             .collect(Collectors.toCollection(ArrayList::new));
-
-                userInput.setUserInput(testcase2);
-                break;
+                // 중복 여부 검사
+                if (hasUniqueDigits(testcase2)) {
+                    userInput.setUserInput(new ArrayList<>(testcase2));
+                    break;
+                } else {
+                    System.out.println("중복된 숫자가 포함되어 있습니다. 다시 시도하세요.");
+                }
             } else {
                 System.out.println("잘못된 입력입니다. 다시 시도하세요.");
             }
@@ -157,6 +179,10 @@ public class main {
         // 스트림을 사용하여 입력값의 유효성 검사
         return input.length() == 3 && input.chars()
                 .allMatch(c -> Character.isDigit(c) && c != '0');
+    }
+    private static boolean hasUniqueDigits(List<Long> numbers) {
+        // 숫자 리스트가 중복이 없는지 확인
+        return numbers.stream().distinct().count() == numbers.size();
     }
 
     public static int countStrikes(int[] computerNumbers, int[] userNumbers) {

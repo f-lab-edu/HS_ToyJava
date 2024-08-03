@@ -10,4 +10,39 @@
 */
 
 public class MatchResult {
+
+
+    private long strikes;
+    private long balls;
+
+
+    public MatchResult() {
+    }
+
+    /*
+    스트라이크랑 볼변수를 또 선언하는건 내가 잘못설계한거인데
+    어떻게 해야하는지 모르겠다
+    MatchResult가 GameResult를 상속해야하는건가?
+    아니면 컬렉션 형태로 스트라이크 랑 볼 카운트를 가지고이어야하나?
+     */
+    public MatchResult(long strikes, long balls) {
+        this.strikes = strikes;
+        this.balls = balls;
+    }
+
+    public long getStrikes() {
+        return strikes;
+    }
+
+    public void setStrikes(long strikes) {
+        this.strikes = strikes;
+    }
+
+    public long getBalls() {
+        return balls;
+    }
+
+    public void setBalls(long balls) {
+        this.balls = balls;
+    }
 }
