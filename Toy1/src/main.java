@@ -65,32 +65,59 @@ public class main {
     }
 
 // 1. 랜덤 난수 생성 메소드
-    public static BaseBallDTO generateRandomNumbers() {
+    private static ComputerNumbers generateRandomNumbers() {
         //랜덤 객체 랜덤 난수 생성을 하기위함
         Random random = new Random();
 
-        //DTO에 담기위해 DTO객체 생성
+        //난수 데이터를 저장하는 ComputerNumbers 객체 생성
         /*
-        question1 : DTO에 생성자를 정의하였기 때문에 값을 넣어주어야 하는데, 이러면 생성자를 여러개 만들어야하는건가?.. 아닌거같은데
-                    3개의 난수는 DTO에 담으면안되나?.. 상태값을 나눠야하나?
-        */
-        /*
+        question1 : 생성자를 정의하였기 때문에 인스턴스 생성시 초기값을 넣어주어야 하는데,
+                    비어있는 껍데기 인스턴스를 만들기 위해선 어떻게 해결해야하지?
+                    if 초기상태값이 총 3개에서 1개만넣어줄수있다면?
+                    오버로딩 형식으로 여러개 생성자를 만들어야하나?
+
         question2 : new로 객체를 생성하는 행위를 만약 스프링 프로젝트라고 가정하면
                     최대한 컴포넌트화시켜서 DI를 받아서 사용하는게 좋은건가?..
                     그러면 new도 안쓰고...너무 이상향적인 이야기인가?
-                    장점은? 단점은?.....
-         */
-        BaseBallDTO baseBallDTO = new BaseBallDTO();
 
+         */
+        ComputerNumbers ComputerNumbers = new ComputerNumbers();
+
+        /* 스트림의 종류
+            1.기본형 스트림:
+                - IntStream: int 타입의 스트림.
+                - LongStream: long 타입의 스트림.
+                - DoubleStream: double 타입의 스트림.
+            2.참조형 스트림:
+                - Stream<T>: 임의의 객체 타입 T를 처리하는 스트림.
+            구문해석
+                1. IntStream.range(0, 3):  0, 1, 2의 스트림을 생성 (0부터 3미만까지) 배열로치면 [0,1,2]
+                2. map(i -> random.nextInt(9) + 1): 1부터 9까지의 난수를 생성하여 스트림에 매핑
+                   map은 스트림의 매핑메서드라고 생각하자 여러종류의 map메서드가 존재하고 스트림의 타입마다 다르다
+                   (map메서드는 스트림의 각요소에대해 주어진 함수로 적용한 결과를 매핑)
+                   nextInt = 0부터 bound - 1 까지의 난수를생성 여기선 0~8까지 그래서 뒤에 +1을 해준다
+                3. boxed(): boxed() 메서드는 기본형 스트림(IntStream, LongStream, DoubleStream)을
+                   해당하는 래퍼 클래스의 스트림(Stream<Integer>, Stream<Long>, Stream<Double>)으로 변환하는 중간 연산
+                4. collect메서드 = 종단연산중 하나이다 스트림의 요소를 컬렉션이나 다른 타입으로 변환하기위함이다
+                5. Collectors.toList() = 스트림의 요소를 new ArrayList를 생성한뒤 add메서드로 요소를 추가한뒤 반환한다
+        */
+
+        /* question목록
+           1. Int사용을 지양하라 하셨는데 그러면 IntStream이아닌 LongStream을 써야하는것인가?
+           2. boxed()메서드사용시 바로 DTO같은 클래스로 씌울수있는방법이있을까?
+           3. collect(Collectors.toList())결국 list변환은 Collectors인터페이스의 toList를 사용하는건데
+              앞에 .collect는 그러면 꼭 세트처럼 붙어있어야하나? 무슨 역할이지?
+              UnsupportedOperationException방지?....
+        */
         List<Integer> testcase1 = IntStream.range(0, 3)
                 .map(i -> random.nextInt(9) + 1)
                 .boxed()
                 .collect(Collectors.toList());
 
-        baseBallDTO.setComputerNumbers(testcase1);
+        ComputerNumbers.setComputerNumbers(testcase1);
 
 
-        return baseBallDTO;
+        return ComputerNumbers;
     }
 
     public static int countStrikes(int[] computerNumbers, int[] userNumbers) {
