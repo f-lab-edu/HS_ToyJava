@@ -4,8 +4,6 @@ public class UserInput {
 
     ArrayList<Long> userInput;
 
-    public UserInput() {
-    }
 
     public UserInput(ArrayList<Long> userInput) {
         this.userInput = userInput;

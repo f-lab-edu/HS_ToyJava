@@ -12,53 +12,32 @@
 */
 public class GameResult {
 
-    private long strikes;
-    private long balls;
 
-    private long matchCount = 0;
+    private MatchResult matchResult;
 
-    public GameResult() {
-    }
 
-    public GameResult(long strikes, long balls) {
-        this.strikes = strikes;
-        this.balls = balls;
+
+    public GameResult(MatchResult matchResult) {
+        this.matchResult = matchResult;
     }
 
     void save(MatchResult Result) {
-        this.strikes = Result.getStrikes();
-        this.balls = Result.getBalls();
-        this.matchCount++;
+        this.matchResult = Result;
     }
 
     String formatLastGameResult() {
-        return "스트라이크: " + strikes + " 볼: " + balls +"(입력횟수 = "+ matchCount+ ")";
+        return "스트라이크: " + matchResult.getStrikes() + " 볼: " + matchResult.getBalls() +"(입력횟수 = "+ matchResult.getMatchCount() + ")";
     }
 
     boolean isDone() {
-        return strikes == 3 || matchCount == 10;
+        return matchResult.getStrikes() == 3 || matchResult.getMatchCount() == 10;
     }
 
     String closeReason() {
-        if (strikes == 3) {
+        if (matchResult.getStrikes() == 3) {
             return "3개의 숫자를 모두 맞히셨습니다! 게임 종료";
         }
         return "입력횟수를 초과하셨습니다. 게임 종료";
     }
 
-    public long getStrikes() {
-        return strikes;
-    }
-
-    public void setStrikes(long strikes) {
-        this.strikes = strikes;
-    }
-
-    public long getBalls() {
-        return balls;
-    }
-
-    public void setBalls(long balls) {
-        this.balls = balls;
-    }
 }
