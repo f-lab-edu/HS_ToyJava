@@ -1,9 +1,10 @@
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.IntStream;
 
 public final class ComputerNumbers {
 
-    private final ArrayList<Long> computerNumbers;
+    private final List<Long> computerNumbers;
 
 
     MatchResult match(UserInput userInput) {
@@ -25,7 +26,7 @@ public final class ComputerNumbers {
     }
 
 
-    public ComputerNumbers(ArrayList<Long> computerNumbers) {
+    public ComputerNumbers(List<Long> computerNumbers) {
         //컴퓨터넘버 자리수 검증
         if(computerNumbers.size() != 3){
             throw new IllegalArgumentException("컴퓨터 숫자는 3자리수여야합니다.");
@@ -34,14 +35,6 @@ public final class ComputerNumbers {
         if(computerNumbers.stream().distinct().count() != 3){
             throw new IllegalArgumentException("컴퓨터 숫자는 중복되지않아야합니다.");
         }
-        this.computerNumbers = computerNumbers;
-    }
-
-    public ArrayList<Long> getComputerNumbers() {
-        return computerNumbers;
-    }
-
-    public void setComputerNumbers(ArrayList<Long> computerNumbers) {
         this.computerNumbers = computerNumbers;
     }
 

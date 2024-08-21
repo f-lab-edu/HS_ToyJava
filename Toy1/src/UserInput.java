@@ -1,19 +1,22 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserInput {
 
-    ArrayList<Long> userInput;
+    private List<Long> userInput;
 
 
-    public UserInput(ArrayList<Long> userInput) {
+    public UserInput(List<Long> userInput) {
         this.userInput = userInput;
     }
 
-    public ArrayList<Long> getUserInput() {
-        return userInput;
+    public List<Long> getUserInput() {
+        //ArrayList<Long> lonhs = new ArrayList<>(userInput);
+        return List.copyOf(userInput);
+        //
     }
 
-    public void setUserInput(ArrayList<Long> userInput) {
+    public void setUserInput(List<Long> userInput) {
         this.userInput = userInput;
     }
 

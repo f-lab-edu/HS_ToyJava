@@ -12,22 +12,25 @@ public final class main {
     public static void main(String[] args) {
 
 
-        //게임 종료를 구분하기위한 boolean 변수
-        boolean gameEnd = false;
-
         System.out.println("숫자 야구 게임에 오신 것을 환영합니다!");
         System.out.println("컴퓨터가 숫자를 선택했습니다. 숫자를 맞춰보세요!");
 
         // 컴퓨터에게 랜덤난수 생성 메소드
         ComputerNumbers computerNumbers = generateRandomNumbers();
+        /*
+          초기화는 한번만해야되는구나 아직 게임 결과가없는데
+          그냥 기본생성자는 쓸수없는데 이렇게 임의값을 넣어서 하는게 맞을까?
+         */
+        GameResult gameResult = new GameResult(new MatchResult(0, 0));
 
         while (true) {
             UserInput userInput = inputUserNumbers(scanner);
             MatchResult Result = computerNumbers.match(userInput);
 
-            //GameResult클래스를에 MatchResult를 넣어서 생성
-            GameResult gameResult = new GameResult(Result);
-            //..위에서 이미 생성하고 또 save로저장을해야하나?
+            //GameResult는 중간에 초기화하면안된다
+            //아니 그러면은 게임이 진행되지않은상태에서 만들려면 디폴트 생성자 말고 다른 방법이 있나?..
+            gameResult.setMatchResult(Result);
+
             gameResult.save(Result);
             System.out.println(gameResult.formatLastGameResult());
 
@@ -74,15 +77,16 @@ public final class main {
         // 1부터 9까지의 숫자를 생성하여 리스트로 변환
         List<Long> numbers = LongStream.rangeClosed(1, 9) // 1부터 9까지의 숫자 생성
                 .boxed() // LongStream을 Stream<Long>으로 변환
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new)); // 가변 리스트로 수집
 
-        // 리스트를 셔플하여 난수를 랜덤하게 섞음
+        // 아 셔플은 가변List만 가능하다 근데 위에 toList로 컬렉션을 만들면
+        // 불변리스트가 되어버린다 그래서 가변리스트로 변환해줘야한다 아.....
         Collections.shuffle(numbers, random);
 
         // 셔플된 리스트에서 처음 3개의 숫자를 선택
-        ArrayList<Long> testcase1 = numbers.stream()
+        List<Long> testcase1 = numbers.stream()
                 .limit(3) // 처음 3개의 숫자를 선택
-                .collect(Collectors.toCollection(ArrayList::new)); // ArrayList로 수집
+                .toList(); // List로 수집
 
         return new ComputerNumbers(testcase1);
     }
@@ -93,10 +97,10 @@ public final class main {
             String input = scanner.nextLine();
 
             if (isValidInput(input)) {
-                ArrayList<Long> testcase2 = input.chars()
+                List<Long> testcase2 = input.chars()
                             .mapToLong(Character::getNumericValue)
                             .boxed()
-                            .collect(Collectors.toCollection(ArrayList::new));
+                            .toList();
                 // 중복 여부 검사
                 if (hasUniqueDigits(testcase2)) {
                     return new UserInput(testcase2);
