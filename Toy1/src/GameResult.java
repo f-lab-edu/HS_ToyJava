@@ -23,7 +23,7 @@ public class GameResult {
     //게임 회차를 관리하기 위한 게임 변수
     //결국은 숫자상태 변수가 필요한건가...static으로 선언?
     // 아니면 초기화 단계를 분리?...
-    private static long gameCount = 0;
+    private long gameCount = 0;
 
 
     public GameResult() {
