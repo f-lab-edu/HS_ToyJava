@@ -15,23 +15,19 @@ public final class main {
         System.out.println("숫자 야구 게임에 오신 것을 환영합니다!");
         System.out.println("컴퓨터가 숫자를 선택했습니다. 숫자를 맞춰보세요!");
 
-        // 컴퓨터에게 랜덤난수 생성 메소드
         ComputerNumbers computerNumbers = generateRandomNumbers();
-        /*
-          초기화는 한번만해야되는구나 아직 게임 결과가없는데
-          그냥 기본생성자는 쓸수없는데 이렇게 임의값을 넣어서 하는게 맞을까?
-         */
-        GameResult gameResult = new GameResult(new MatchResult(0, 0));
+
+        //기본생성자 생성 (Map초기화)
+        GameResult gameResult = new GameResult();
 
         while (true) {
             UserInput userInput = inputUserNumbers(scanner);
+            //게임 실행및 결과 도출
             MatchResult Result = computerNumbers.match(userInput);
-
-            //GameResult는 중간에 초기화하면안된다
-            //아니 그러면은 게임이 진행되지않은상태에서 만들려면 디폴트 생성자 말고 다른 방법이 있나?..
-            gameResult.setMatchResult(Result);
-
-            gameResult.save(Result);
+            //GameResult에 진행중인게임 내역 저장
+            gameResult.saveGameResult(Result);
+            //MatchResult객체 초기화 및 현재 게임 내역 저장
+            gameResult.saveMatchResult(Result);
             System.out.println(gameResult.formatLastGameResult());
 
             if (gameResult.isDone()) {

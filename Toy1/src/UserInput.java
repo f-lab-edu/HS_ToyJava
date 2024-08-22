@@ -13,12 +13,8 @@ public class UserInput {
     public List<Long> getUserInput() {
         //ArrayList<Long> lonhs = new ArrayList<>(userInput);
         return List.copyOf(userInput);
-        //
     }
 
-    public void setUserInput(List<Long> userInput) {
-        this.userInput = userInput;
-    }
 
 
 }
