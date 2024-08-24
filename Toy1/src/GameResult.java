@@ -16,7 +16,6 @@ import java.util.Map;
 public class GameResult {
 
 
-    private MatchResult matchResult;
 
     private final Map<Long, MatchResult> matchResultMap = new HashMap<>();
 
@@ -31,20 +30,35 @@ public class GameResult {
         this.matchResultMap.put(gameCount, matchResult);
     }
 
-    void saveMatchResult(MatchResult matchResult) {
-        this.matchResult = matchResult;
+
+
+    /*  변수로 선언하려했으나 이것도 초기화 문제가 생기고 사용되는 메소드에 로컬변수로 정의..해도되는데 더러워보인다
+        ex)
+        String formatLastGameResult() {
+            MatchResult lastGameValue = matchResultMap.get((long) matchResultMap.size());
+            return "스트라이크: " + lastGameValue.getStrikes() + " 볼: " + lastGameValue.getBalls() +"(입력횟수 = "+ matchResultMap.size() + ")";
+        }
+
+        GameResult에서만 사용되는 메소드로 빼버리자
+     */
+    private MatchResult getLastGameValue() {
+        //타입 캐스팅 잊지말자
+        return matchResultMap.get((long) matchResultMap.size());
     }
 
     String formatLastGameResult() {
-        return "스트라이크: " + matchResult.getStrikes() + " 볼: " + matchResult.getBalls() +"(입력횟수 = "+ matchResultMap.size() + ")";
+        MatchResult lastGameValue = getLastGameValue();
+        return "스트라이크: " + lastGameValue.getStrikes() + " 볼: " + lastGameValue.getBalls() +"(입력횟수 = "+ matchResultMap.size() + ")";
     }
 
     boolean isDone() {
-        return matchResult.getStrikes() == Constants.THREE || matchResultMap.size() == Constants.TEN;
+        MatchResult lastGameValue = getLastGameValue();
+        return lastGameValue.getStrikes() == Constants.GOAL_STRIKE_COUNT || matchResultMap.size() == Constants.MAX_GAME_TRY;
     }
 
     String closeReason() {
-        if (matchResult.getStrikes() == Constants.THREE) {
+        MatchResult lastGameValue = getLastGameValue();
+        if (lastGameValue.getStrikes() == Constants.GOAL_STRIKE_COUNT) {
             return "3개의 숫자를 모두 맞히셨습니다! 게임 종료";
         }
         return "입력횟수를 초과하셨습니다. 게임 종료";

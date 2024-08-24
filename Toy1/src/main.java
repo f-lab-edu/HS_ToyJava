@@ -26,8 +26,7 @@ public final class main {
             MatchResult Result = computerNumbers.match(userInput);
             //GameResult에 진행중인게임 내역 저장
             gameResult.saveGameResult(Result);
-            //MatchResult객체 초기화 및 현재 게임 내역 저장
-            gameResult.saveMatchResult(Result);
+
             System.out.println(gameResult.formatLastGameResult());
 
             if (gameResult.isDone()) {

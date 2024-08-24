@@ -29,10 +29,10 @@ public final class ComputerNumbers {
     public ComputerNumbers(List<Long> computerNumbers) {
         //컴퓨터넘버 자리수 검증
         if(computerNumbers.size() != 3){
-            throw new IllegalArgumentException("컴퓨터 숫자는 "+ Constants.THREE +" 자리수여야합니다.");
+            throw new IllegalArgumentException("컴퓨터 숫자는 "+ Constants.CUMPUTER_NUMBER_SIZE +" 자리수여야합니다.");
         }
         //중복검증
-        if(computerNumbers.stream().distinct().count() != Constants.THREE){
+        if(computerNumbers.stream().distinct().count() != Constants.CUMPUTER_NUMBER_SIZE){
             throw new IllegalArgumentException("컴퓨터 숫자는 중복되지않아야합니다.");
         }
         this.computerNumbers = computerNumbers;
