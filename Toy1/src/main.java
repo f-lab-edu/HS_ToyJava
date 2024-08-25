@@ -1,87 +1,45 @@
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
-public class main {
+public final class main {
+
+
+    // 전역변수로 선언 (지양하자...)
+    final static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-
-        // 플레이어에게 입력값을 받기 위한 스캐너
-        Scanner scanner = new Scanner(System.in);
-        //게임 종료를 구분하기위한 boolean 변수
-        boolean gameEnd = false;
 
 
         System.out.println("숫자 야구 게임에 오신 것을 환영합니다!");
         System.out.println("컴퓨터가 숫자를 선택했습니다. 숫자를 맞춰보세요!");
 
-        // 컴퓨터에게 랜덤난수 생성 메소드
         ComputerNumbers computerNumbers = generateRandomNumbers();
+
+        //기본생성자 생성 (Map초기화)
         GameResult gameResult = new GameResult();
+
         while (true) {
-            UserInput userInput = inputUserNumbers();
-            MatchResult gameResult = computerNumbers.match(userInput);
-            gameResult.save(gameResult);
+            UserInput userInput = inputUserNumbers(scanner);
+            //게임 실행및 결과 도출
+            MatchResult Result = computerNumbers.match(userInput);
+            //GameResult에 진행중인게임 내역 저장
+            gameResult.saveGameResult(Result);
+
             System.out.println(gameResult.formatLastGameResult());
+
             if (gameResult.isDone()) {
+                System.out.println(gameResult.closeReason());
                 break;
             }
         }
-
-        System.out.println(gameResult.formatTotalGameResult());
-        /*
-        while (!gameEnd) {
-            System.out.print("3자리 숫자를 입력하세요: ");
-            String input = scanner.nextLine();
-
-            if (input.length() != 3) {
-                System.out.println("3자리 숫자를 입력해주세요.");
-                continue;
-            }
-
-            int[] userNumbers = new int[3];
-            try {
-                for (int i = 0; i < 3; i++) {
-                    userNumbers[i] = Integer.parseInt(input.substring(i, i + 1));
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("숫자만 입력해주세요.");
-                continue;
-            }
-
-            int strikes = countStrikes(computerNumbers, userNumbers);
-            int balls = countBalls(computerNumbers, userNumbers);
-
-
-            System.out.println("스트라이크: " + strikes + " 볼: " + balls);
-
-            if (strikes == 3) {
-                System.out.println("축하합니다! 숫자를 모두 맞추셨습니다.");
-                gameEnd = true;
-            }
-        }
-        */
         scanner.close();
     }
 
 // 1. 랜덤 난수 생성 메소드
     private static ComputerNumbers generateRandomNumbers() {
-        //랜덤 객체 랜덤 난수 생성을 하기위함
         Random random = new Random();
-
-        //난수 데이터를 저장하는 ComputerNumbers 객체 생성
-        /*
-        question1 : 생성자를 정의하였기 때문에 인스턴스 생성시 초기값을 넣어주어야 하는데,
-                    비어있는 껍데기 인스턴스를 만들기 위해선 어떻게 해결해야하지?
-                    if 초기상태값이 총 3개에서 1개만넣어줄수있다면?
-                    오버로딩 형식으로 여러개 생성자를 만들어야하나?
-
-        question2 : new로 객체를 생성하는 행위를 만약 스프링 프로젝트라고 가정하면
-                    최대한 컴포넌트화시켜서 DI를 받아서 사용하는게 좋은건가?..
-                    그러면 new도 안쓰고...너무 이상향적인 이야기인가?
-
-         */
-        ComputerNumbers ComputerNumbers = new ComputerNumbers();
 
         /* 스트림의 종류
             1.기본형 스트림:
@@ -108,58 +66,59 @@ public class main {
            3. collect(Collectors.toList())결국 list변환은 Collectors인터페이스의 toList를 사용하는건데
               앞에 .collect는 그러면 꼭 세트처럼 붙어있어야하나? 무슨 역할이지?
               UnsupportedOperationException방지?....
+              어 toArrayList는없다? 그러면 toList로만 변환하는게 맞는건가?
         */
-        List<Integer> testcase1 = IntStream.range(0, 3)
-                .map(i -> random.nextInt(9) + 1)
-                .boxed()
-                .collect(Collectors.toList());
 
-        ComputerNumbers.setComputerNumbers(testcase1);
+        // 1부터 9까지의 숫자를 생성하여 리스트로 변환
+        List<Long> numbers = LongStream.rangeClosed(1, 9) // 1부터 9까지의 숫자 생성
+                .boxed() // LongStream을 Stream<Long>으로 변환
+                .collect(Collectors.toCollection(ArrayList::new)); // 가변 리스트로 수집
 
+        // 아 셔플은 가변List만 가능하다 근데 위에 toList로 컬렉션을 만들면
+        // 불변리스트가 되어버린다 그래서 가변리스트로 변환해줘야한다 아.....
+        Collections.shuffle(numbers, random);
 
-        return ComputerNumbers;
+        // 셔플된 리스트에서 처음 3개의 숫자를 선택
+        List<Long> testcase1 = numbers.stream()
+                .limit(3) // 처음 3개의 숫자를 선택
+                .toList(); // List로 수집
+
+        return new ComputerNumbers(testcase1);
     }
 
-    public static int countStrikes(int[] computerNumbers, int[] userNumbers) {
-    /* case1 스트림 이용X
-        int strikes = 0;
-        for (int i = 0; i < 3; i++) {
-            if (computerNumbers[i] == userNumbers[i]) {
-                strikes++;
-            }
-        }
-        return strikes;
+    private static UserInput inputUserNumbers(Scanner scanner) {
+        while (true) {
+            System.out.print("숫자 3자리를 입력하세요 (각 숫자는 1~9 범위): ");
+            String input = scanner.nextLine();
 
-    */
-
-    //case2 스트림 이용O
-        return (int) IntStream.range(0, 3)
-                .filter(i -> computerNumbers[i] == userNumbers[i])
-                .count();
-    }
-
-    public static int countBalls(int[] computerNumbers, int[] userNumbers) {
-
-    /* case1 스트림 이용X
-        int balls = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (i != j && computerNumbers[i] == userNumbers[j]) {
-                    balls++;
+            if (isValidInput(input)) {
+                List<Long> testcase2 = input.chars()
+                            .mapToLong(Character::getNumericValue)
+                            .boxed()
+                            .toList();
+                // 중복 여부 검사
+                if (hasUniqueDigits(testcase2)) {
+                    return new UserInput(testcase2);
+                } else {
+                    System.out.println("중복된 숫자가 포함되어 있습니다. 다시 시도하세요.");
                 }
+            } else {
+                System.out.println("잘못된 입력입니다. 다시 시도하세요.");
             }
         }
-        return balls;
 
-    */
-
-    //case2 스트림 이용O
-        return (int) IntStream.range(0, 3)
-                .flatMap(i -> IntStream.range(0, 3)
-                .filter(j -> i != j && computerNumbers[i] == userNumbers[j]))
-                .count();
     }
 
+    //아직 구문해석불가 유효성검사기능도 따로 유틸클래스로 모아놓고싶다 프로젝트가 커진다면
+    private static boolean isValidInput(String input) {
+        // 스트림을 사용하여 입력값의 유효성 검사
+        return input.length() == 3 && input.chars()
+                .allMatch(c -> Character.isDigit(c) && c != '0');
+    }
+    private static boolean hasUniqueDigits(List<Long> numbers) {
+        // 숫자 리스트가 중복이 없는지 확인
+        return numbers.stream().distinct().count() == numbers.size();
+    }
 
 }
 
