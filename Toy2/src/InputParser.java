@@ -26,7 +26,7 @@ public class InputParser {
         //입력받은 문자열을 문자배열로 바꾼뒤 루프 시작
         for (char ch : inputReplaceBlank.toCharArray()) {
             //메소드화
-            ParseChar(ch, number);
+            parseChar(ch, number);
         }
 
         //마지막 숫자 처리 메소드로 뺴야하나?
@@ -46,7 +46,7 @@ public class InputParser {
 
     # 이미 입력값의 검증은 끝났기에 예외처리 삭제
      */
-    private void ParseChar(char ch, StringBuilder number) {
+    private void parseChar(char ch, StringBuilder number) {
 
         if (ch == '(' || ch == ')') {
             if (number.length() > 0) {
