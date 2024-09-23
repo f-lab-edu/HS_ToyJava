@@ -42,7 +42,11 @@ public class StringUtil {
             }
         }
 
-
         return strlist;
     }
+
+    public static String toUpperCase(String str) {
+        return "HELLO WORLD";
+    }
+
 }

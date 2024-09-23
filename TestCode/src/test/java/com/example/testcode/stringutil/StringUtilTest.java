@@ -75,7 +75,18 @@ class StringUtilTest {
         assertEquals("Hello", result.get(0));
         assertEquals("World", result.get(1));
 
+    }
 
+    @DisplayName("문자를 모두 대문자로 변경합니다")
+    @Test
+    public void givenString_whenToUpperCase_thenUpperCaseString() {
+        //given
+        String str = "Hello World";
 
+        //when
+        String result = StringUtil.toUpperCase(str);
+
+        //then
+        assertEquals("HELLO WORLD", result);
     }
 }
