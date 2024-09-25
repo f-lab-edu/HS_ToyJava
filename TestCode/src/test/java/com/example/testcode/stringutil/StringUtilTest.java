@@ -2,6 +2,7 @@ package com.example.testcode.stringutil;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -11,11 +12,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class StringUtilTest {
 
 
+    @Order(1)
     @DisplayName("문자열 뒤집기 테스트입니다")
     @Nested
     class ReverseTest {
 
-
+        @Order(1)
         @Test
         @DisplayName("문자열을 뒤집는다.")
         public void givenString_whenReverse_thenReversedString() {
@@ -29,7 +31,7 @@ class StringUtilTest {
             assertEquals("dlroW olleH", result);
 
         }
-
+        @Order(1)
         @Test
         @DisplayName("숫자가 포함된 문자열을 뒤집는다.")
         public void givenStringIncludeNumber_whenReverse_thenReversedString() {
@@ -46,7 +48,7 @@ class StringUtilTest {
 
     }
 
-
+    @Order(2)
     @DisplayName("문자열을 잘라서 나누어봅시다")
     @Test
     public void givenString_whenSplit_thenSplitedString() {
@@ -61,6 +63,7 @@ class StringUtilTest {
     }
 
 
+    @Order(3)
     @DisplayName("문자열에 대문자 발견시 새로운 문자열에 보관합니다")
     @Test
     public void givenString_whenFindUpperCase_thenNewString() {
@@ -77,6 +80,7 @@ class StringUtilTest {
 
     }
 
+    @Order(4)
     @DisplayName("문자를 모두 대문자로 변경합니다")
     @Test
     public void givenString_whenToUpperCase_thenUpperCaseString() {

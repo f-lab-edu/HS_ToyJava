@@ -14,16 +14,16 @@ import static org.junit.jupiter.api.Assertions.*;
 class NestedServiceTest {
 
     @Nested
-    @DisplayName("테스트 시작합니다")
+    @DisplayName("정수 연산 테스트 시작합니다")
     class FirstTest {
 
         @Nested
-        @DisplayName("테스트가 성공하는 경우 (case1)")
-        class start {
+        @DisplayName("정상적인 연산이 성공했을 경우 success")
+        class Start {
 
             @Test
-            @DisplayName("덧셈하기")
-            void FirstTest() {
+            @DisplayName("두 Long 타입의 숫자를 더할시 정수의 합을 반환한다.")
+            void firstTest() {
                 //given
                 Long a = 1L;
                 Long b = 2L;
@@ -35,20 +35,68 @@ class NestedServiceTest {
         }
 
         @Nested
-        @DisplayName("테스트가 실패하는 경우 (case2)")
-        class fail {
+        @DisplayName("뺄셈 연산시 값이 같이 않을 경우 fail")
+        class Fail {
 
             @Test
-            @DisplayName("뺄셈하기")
-            void SecondTest() {
+            @DisplayName("두정수를 뺄경우 값이 같지 않을경우 실패한다.")
+            void secondTest() {
                 //given
                 Long a = 1L;
-                Long b = 2L;
+                //Long b = 2L;
+                Long b = 3L;
+
                 //when
                 Long result = a - b;
                 //then
                 assertEquals(-1L, result);
             }
+        }
+
+        @Nested
+        @DisplayName("경계테스트")
+        class BoundaryTest {
+
+            //최소값 테스트
+            @Test
+            @DisplayName("Long의 최소값과 2를 더할경우 성공하는지 확인?")
+            void thirdTest() {
+                //given
+                Long a = Long.MIN_VALUE;
+                Long b = 2L;
+                //when
+                Long result = a + b;
+                //then
+                assertEquals(-9223372036854775806L, result);
+
+            }
+
+            //최대값 테스트 & overflow 테스트
+            @Test
+            @DisplayName("Long의 최대값과 2를 더할경우 성공하는지 확인?")
+            void fourthTest() {
+                //given
+                Long a = Long.MAX_VALUE;
+                Long b = 2L;
+                //when
+                Long result = a + b;
+                //then
+                assertEquals(9223372036854775807L, result);
+            }
+
+            //0값 테스트
+            @Test
+            @DisplayName("Long의 0값과 2를 더할경우 성공하는지 확인?")
+            void fifthTest() {
+                //given
+                Long a = 0L;
+                Long b = 2L;
+                //when
+                Long result = a + b;
+                //then
+                assertEquals(2L, result);
+            }
+
         }
     }
 

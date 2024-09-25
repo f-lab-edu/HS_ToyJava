@@ -2,7 +2,7 @@ package com.example.testcode.dateutil;
 
 import java.time.LocalDate;
 
-public class DateForMat {
+public class DateFormat  {
 
     public static int diffDate(String date1, String date2) {
 
