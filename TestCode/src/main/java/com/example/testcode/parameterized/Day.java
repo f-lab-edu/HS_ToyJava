@@ -10,8 +10,7 @@ public enum Day {
     Saturday("2024-10-05"),
     Sunday("2024-10-06");
 
-
-    private String date;
+    private final String date;
 
     Day(String date) {
         this.date = date;

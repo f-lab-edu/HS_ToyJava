@@ -3,9 +3,16 @@ package com.example.testcode.parameterized;
 import java.time.LocalDate;
 import java.util.stream.Stream;
 
+
 public class FindSunday {
 
 
+    //Constants.SUNDAY.getDay()
+    /*
+    'int com.example.testcode.parameterized.Constants.getDay()'
+    java.lang.NoSuchMethodError: 'int com.example.testcode.parameterized.Constants.getDay()'
+    테스트코드에러 ecum을 왜 못찾지?...
+     */
     public static LocalDate findFirstSunday(LocalDate date) {
         if (date.getDayOfWeek().getValue() == 7) {  // 날짜가 일요일인지 확인
             return date; // 만약 해당 날짜가 일요일이면 그 날짜를 반환
