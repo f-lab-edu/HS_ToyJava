@@ -12,8 +12,8 @@ public class CustomArgumentsProvider implements ArgumentsProvider {
     public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
         return Stream.of(
                 Arguments.of("2024-09-30"),
-                Arguments.of("20241001"),
-                Arguments.of("2024/10/02"),
+                Arguments.of("2024-10-01"),
+                Arguments.of("2024-10-02"),
                 Arguments.of("2024-10-03")
         );
     }

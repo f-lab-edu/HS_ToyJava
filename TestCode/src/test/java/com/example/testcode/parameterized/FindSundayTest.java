@@ -19,41 +19,20 @@ class FindSundayTest {
     @Test
     @DisplayName("LocalDate(yyyy-mm-dd)를 입력했을때 일요일을 찾는다. - success")
     public void givenLocalDate_whenFindFirstSunday_thenFirstSunday() {
-        //given
-        LocalDate date = LocalDate.of(2024, 9, 29);
-        //when
-        LocalDate result = FindSunday.findFirstSunday(date);
-        //then
-        assertEquals(LocalDate.of(2024, 9, 29), result);
+        //BDD쓰지말고 극한으로 줄여보자
+        assertEquals(LocalDate.of(2024, 9, 29), FindSunday.findFirstSunday(LocalDate.of(2024, 9, 29)));
 
     }
 
     @Test
     @DisplayName("날짜 포맷이 맞지않게(yyyy-mm-dd형식이아닌) 12345 입력했을때 실패한다.")
     public void givenWrongLocalDateForMat_whenFindFirstSunday_thenFirstSunday() {
-        /* 기존 코드
-        //given
-        LocalDate date = LocalDate.of(12345, 12345, 12345);
-        //when
-        LocalDate result = FindSunday.findFirstSunday(date);
-
-        // assertThrows 메서드가 예외를 발생시키는 코드를 람다 표현식으로 감싸야 한다
-        //then
-        assertThrows(DateTimeException.class, () -> FindSunday.findFirstSunday(date));
-        */
 
         /*
-        에초에 테스트작성시나리오가 잘못되었다 given에서 이미 예외가 발생하기 때문
-        현재 상황에선 아래와 같이 테스트를 작성해야한다.
-        혹은 테스트할 메소드에 LocalDate로 변환작업이 있어야지 기존 시나리오 검증이 된다
-        */
-
-        //then
+        FindSunday.findFirstSunday(date); 해당 구문이전에 이미 예외가 발생하기에 불필요함으로 제거
+         */
         assertThrows(DateTimeException.class, () -> {
-            //given
             LocalDate date = LocalDate.of(12345, 12345, 12345);
-            //when
-            FindSunday.findFirstSunday(date);
         });
 
     }
@@ -74,13 +53,8 @@ class FindSundayTest {
     @Test
     @DisplayName("경계테스트 - 999999999년을 입력하면 정상적으로 반환이 되지않는다")
     public void givenMaxLocalDate_whenFindFirstSunday_thenFirstSunday() {
-        //given
-        LocalDate date = LocalDate.MAX;
-        //when
-        //LocalDate result = FindSunday.findFirstSunday(date);
-        //then
-        //assertThrows는 람다식으로 표현을 하게되면 give-when-then형식이 깨지게된다?
-        assertThrows(DateTimeException.class, () -> FindSunday.findFirstSunday(date));
+        //given은 없지만 더 간결하게 표현 시도
+        assertThrows(DateTimeException.class, () -> FindSunday.findFirstSunday(LocalDate.MAX));
 
     }
 
@@ -153,15 +127,12 @@ class FindSundayTest {
     @ParameterizedTest
     @DisplayName("CsvSource 이용한 테스트")
     @CsvSource({
-            "20241004",
-            "2024/10/05"
+            "2024-10-04",
+            "2024-10-05"
     })
     public void csvSourceTest(LocalDate date) {
-        //given
-        //when
         LocalDate result = FindSunday.findFirstSunday(date);
-        //then
-        assertThrows(ParameterResolutionException.class, () -> FindSunday.findFirstSunday(date));
+        assertEquals(LocalDate.of(2024, 10, 6), result);
     }
 
 
@@ -173,11 +144,9 @@ class FindSundayTest {
     이것역시도 자동으로 형변환을 지원해준다
     */
     @ParameterizedTest
-    @DisplayName("@ArgumentSource 이용한 테스트")
+    @DisplayName("@ArgumentSource 이용한 테스트 ")
     @ArgumentsSource(CustomArgumentsProvider.class)
     public void argumentSourceTest(LocalDate date) {
-        //given
-        //when
         LocalDate result = FindSunday.findFirstSunday(date);
         //then
         assertEquals(LocalDate.of(2024, 10, 6), result);
