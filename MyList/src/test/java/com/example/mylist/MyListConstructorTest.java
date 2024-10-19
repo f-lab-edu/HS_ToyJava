@@ -49,7 +49,7 @@ class MyListConstructorTest {
 
     //Set과 ArrayList를 분리하지 않고 한번에 테스트를 진행해보았다
     @Test
-    @DisplayName("CustomList 객체 복사 생성 테스트")
+    @DisplayName("컬렉션 객체를 넣어서 CustomList객체를 생성할 수 있다")
     void createCustomListWithCollection() {
         ArrayList<String> array = new ArrayList<>();
         array.add("a");
@@ -65,8 +65,6 @@ class MyListConstructorTest {
         MyList<String> copiedList2 = new MyList<>(set);
 
         assertEquals(array.get(1), copiedList.get(1));
-        //set은 순서가 없기때문에 순서가 다를수있다 다른방식을 생각해보자
-        //assertEquals(set.contains("a"), copiedList2.get(0));
 
     }
 

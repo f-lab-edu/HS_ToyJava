@@ -43,16 +43,6 @@ public class MyList<E> implements List<E>{
         }
     }
 
-    //테스트용 생성자
-    //아 테스트용 생성자 만들고 실제 생성자들은 private해도 될거같다
-    public MyList(String number, String number1, String number2) {
-        this.elementData = new Object[3];
-        elementData[0] = number;
-        elementData[1] = number1;
-        elementData[2] = number2;
-        size = 3;
-    }
-
 
     //생성자 끝========================================================================
 
@@ -304,25 +294,16 @@ public class MyList<E> implements List<E>{
 
     @Override
     public boolean removeAll(Collection<?> c) {
-
         boolean flag = false;
-        //반목이 많아지면 성능상 별로일거같은데 다른 방법을 생각해보았으나 결국 Stream이고
-        //Sream역시도 결국 내부 반복이고 반복문은 피할수없을것같다
-        // 반복문이 성능에 문제를 주긴하지만 내가 생각한것 만큼 많이 잡아먹지는 않는다고는한다
+
         for(Object o : c) {
             if(contains(o)) {
-                //length가 아니라 size로 해야한다
-                for(int i=0; i<size; i++) {
-                    if(elementData[i].equals(o)) {
-                        System.arraycopy(elementData, i+1, elementData, i, size-1);
-                        //이거때문에 remove()를 못쓰다니...
-                        elementData[size-1] = null;
-                        size--;
-                    }
-                }
+                remove(o);
             }
             flag = true;
         }
+
+
         return flag;
     }
 
@@ -360,19 +341,21 @@ public class MyList<E> implements List<E>{
 
     @Override
     public void clear() {
-        //요소를 제거하는거니깐 null로 초기화 리스트의 크기는 유지되겠지만
-        // 참조요소를 없애면 GC가 처리해줄라나?
+        /*
+        코드 개발시 for문 사용할때 시간복잡도를 잘몰라도 한번 생각해보는 시간을 가져보자
+        이 방식은 O(n)의 시간복잡도를 가진다
         for(int i=0; i<size; i++) {
             elementData[i] = null;
         }
+         */
+        // 이 방식은 O(1)의 시간복잡도를 가진다
+        elementData = new Object[size];
         size = 0;
     }
 
     @Override
     public E set(int index, E element) {
-        if(index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
-        }
+        checkIndex(index);
         E before = elementData(index);
         elementData[index] = element;
 
@@ -382,14 +365,15 @@ public class MyList<E> implements List<E>{
 
     @Override
     public int indexOf(Object o) {
-
         int flag = 0;
 
-        for(Object e : elementData) {
-            if(e.equals(o)) {
-                return flag;
+        if(contains(o)) {
+            for(Object e : elementData) {
+                if(e.equals(o)) {
+                    return flag;
+                }
+                flag++;
             }
-            flag++;
         }
 
         return -1;
@@ -398,20 +382,11 @@ public class MyList<E> implements List<E>{
     @Override
     public int lastIndexOf(Object o) {
 
-        Object[] temp = new Object[size];
-        int flag = size-1;
-        //역배치
-        for(int i=0; i<size; i++) {
-            temp[i] = elementData[size-i-1];
-        }
-
-        for(Object e : temp) {
-            if(e.equals(o)) {
-                return flag;
+        for(int i=size-1; i>=0; i--) {
+            if(elementData[i].equals(o)) {
+                return i;
             }
-            flag--;
         }
-
 
         return -1;
     }

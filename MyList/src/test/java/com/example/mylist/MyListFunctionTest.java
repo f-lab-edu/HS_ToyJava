@@ -18,7 +18,10 @@ public class MyListFunctionTest {
     @BeforeEach
     public void setUp() {
         // 각 테스트 전에 새로운 MyList 인스턴스를 생성
-        testList = new MyList<>("1", "2", "3");
+        testList = new MyList<>();
+        testList.add("1");
+        testList.add("2");
+        testList.add("3");
     }
 
     //get() 메서드 테스트
@@ -30,21 +33,35 @@ public class MyListFunctionTest {
         assertEquals("3", testList.get(2));
 
     }
+    //get() 메서드 실패케이스
+    @Test
+    @DisplayName("get() 메서드 사용시 유효하지않은 인덱스인경우 예외발생")
+    void getFail() {
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            testList.get(3);
+        });
+    }
+    //=====================================================================
 
     //elementData() 메서드 테스트
     @Test
-    @DisplayName("elementData() 메서드를 이용하여 해당 인덱스의 요소를 가져올 수 있다, 유효하지않은 인덱스인경우 예외발생")
+    @DisplayName("elementData() 메서드를 이용하여 해당 인덱스의 요소를 가져올 수 있다")
     void elementData() {
-
-
         assertEquals("1", testList.elementData(0));
         assertEquals("2", testList.elementData(1));
         assertEquals("3", testList.elementData(2));
+    }
+
+    //elementData() 메서드 실패케이스
+    @Test
+    @DisplayName("elementData() 메서드 사용시 유효하지않은 인덱스인경우 예외발생")
+    void elementDataFail() {
         assertThrows(IndexOutOfBoundsException.class, () -> {
             testList.elementData(3);
         });
-
     }
+
+    //======================================================================
 
     //size() 메서드 테스트(실패케이스 경계테스트 없다고 판단)
     @Test
@@ -53,17 +70,21 @@ public class MyListFunctionTest {
         assertEquals(3, testList.size());
     }
 
-    //isEmpty() 메서드 테스트
+
+    //======================================================================
+
+    //isEmpty() 메서드 테스트 (실패케이스 없다고 판단)
     @Test
     @DisplayName("isEmpty() 메서드를 이용하여 리스트가 비어있는지 확인할 수 있다")
     void isEmpty() {
         MyList<String> myList = new MyList<>();
-
         assertEquals(false, testList.isEmpty());
         assertEquals(true, myList.isEmpty());
     }
 
-    //contains() 메서드 테스트
+    //======================================================================
+
+    //contains() 메서드 테스트 (실패케이스 없다고 판단)
     @Test
     @DisplayName("contains() 메서드를 이용하여 해당 요소가 존재하는지 true/false로 확인할 수 있다")
     void contains() {
@@ -71,11 +92,12 @@ public class MyListFunctionTest {
         assertEquals(false, testList.contains("4"));
     }
 
+    //======================================================================
+
     //iterator() 메서드 테스트
     @Test
     @DisplayName("iterator() 메서드를 이용하여 리스트의 요소를 순회할 수 있다")
     void iterator() {
-
         //아 테스트로 행위가 이루어지면 계속 이어서 진행할수있구나
         //assert메소드는 단발성일줄알았는데 코드라인 이어서 가는구나
         Iterator<String> iterator = testList.iterator();
@@ -86,9 +108,9 @@ public class MyListFunctionTest {
         assertEquals(true, iterator.hasNext());
         assertEquals("3", iterator.next());
         assertEquals(false, iterator.hasNext());
-
-
     }
+
+    //======================================================================
 
     //toArray() 메서드 테스트
     @Test
@@ -101,18 +123,29 @@ public class MyListFunctionTest {
         assertEquals(array.length, testList.size());
     }
 
+    //======================================================================
+
     //remove() 메서드 테스트
     @Test
     @DisplayName("remove() 메서드를 이용하여 해당 요소를 삭제할 수 있다")
     void remove() {
-
         assertEquals(true, testList.remove("1"));
         assertEquals(2, testList.size());
         assertEquals(false, testList.remove("4"));
         assertEquals(2, testList.size());
         assertEquals("2", testList.get(0));
-
     }
+
+    //remove() 메서드 실패케이스
+    @Test
+    @DisplayName("remove() 메서드 사용시 유효하지않은 인덱스인경우 예외발생")
+    void removeFail() {
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            testList.remove(3);
+        });
+    }
+
+    //======================================================================
 
     //removeAll() 메서드 테스트
     @Test
@@ -127,6 +160,8 @@ public class MyListFunctionTest {
         assertEquals("3", testList.get(0));
     }
 
+    //======================================================================
+
     //remove(int index) 메서드 테스트
     @Test
     @DisplayName("remove(int index) 메서드를 이용하여 해당 인덱스의 요소를 삭제할 수 있다")
@@ -135,6 +170,17 @@ public class MyListFunctionTest {
         assertEquals(2, testList.size());
         assertEquals("3", testList.get(1));
     }
+
+    //remove(int index) 메서드 실패케이스
+    @Test
+    @DisplayName("remove(int index) 메서드 사용시 유효하지않은 인덱스인경우 예외발생")
+    void removeIndexFail() {
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            testList.remove(3);
+        });
+    }
+
+    //======================================================================
 
     //containsAll() 메서드 테스트
     @Test
@@ -153,6 +199,8 @@ public class MyListFunctionTest {
         assertEquals(false, testList.containsAll(noHaveContainsList));
     }
 
+    //======================================================================
+
     //clear() 메서드 테스트
     @Test
     @DisplayName("clear() 메서드를 이용하여 리스트의 모든 요소를 삭제할 수 있다")
@@ -160,6 +208,8 @@ public class MyListFunctionTest {
         testList.clear();
         assertEquals(0, testList.size());
     }
+
+    //======================================================================
 
     //set() 메서드 테스트
     @Test
@@ -170,6 +220,17 @@ public class MyListFunctionTest {
         assertEquals("4", testList.get(0));
     }
 
+    //set() 메서드 실패케이스
+    @Test
+    @DisplayName("set() 메서드 사용시 유효하지않은 인덱스인경우 예외발생")
+    void setFail() {
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            testList.set(3, "4");
+        });
+    }
+
+    //======================================================================
+
     //indxOf() 메서드 테스트
     @Test
     @DisplayName("indexOf() 메서드를 이용하여 해당 요소의 인덱스를 반환할 수 있다")
@@ -177,7 +238,10 @@ public class MyListFunctionTest {
         assertEquals(0, testList.indexOf("1"));
         assertEquals(1, testList.indexOf("2"));
         assertEquals(2, testList.indexOf("3"));
+        assertEquals(-1, testList.indexOf("4"));
     }
+
+    //======================================================================
 
     //lastIndexOf() 메서드 테스트
     @Test
@@ -188,6 +252,8 @@ public class MyListFunctionTest {
         assertEquals(3, testList.lastIndexOf("1"));
         assertEquals(4, testList.lastIndexOf("3"));
     }
+
+    //======================================================================
 
     //subList() 메서드 테스트
     //제네릭이 마음에 걸린다

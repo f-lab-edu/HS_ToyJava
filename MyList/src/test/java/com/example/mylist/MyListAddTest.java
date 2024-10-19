@@ -50,7 +50,7 @@ public class MyListAddTest {
         myList.add("5");
         myList.add(2, "SSSS");
 
-        assertEquals(5, myList.size());
+        assertEquals(6, myList.size());
         assertEquals("SSSS", myList.get(2));
     }
 
